@@ -58,6 +58,11 @@ This repository satisfies the course requirements: sequential decision making, e
 │
 └── README.md                       # This file
 
+🚀 Installation & Setup:
+
+Install required libraries:
+
+pip install -r requirements.txt
 
 📌 Running Experiments
 
