@@ -25,24 +25,38 @@ This repository satisfies the course requirements: sequential decision making, e
 📦 traffic-colight-cs/
 │
 ├── multi_intersection_env.py       # Core traffic environment
+
 ├── single_intersection_env.py      # Local intersection dynamics
+
 │
 ├── colight_agent.py                # Cooperative RL agent (CoLight-inspired)
+
+
 ├── train_colight.py                # Training script
+
+
 ├── eval_colight.py                 # Evaluation script
+
 │
 ├── train_independent_rl.py         # Independent RL baseline
+
 ├── eval_independent_rl.py          # Independent baseline evaluation
+
 │
 ├── run_fixed_baseline.py           # Fixed-time controller baseline
+
 │
 ├── visual_sim.py                   # Pygame traffic visualization
+
 │
 ├── logger.py                       # Experiment logging utility
+
 │
 ├── results/                        # Output logs / reward curves
+
 │
 └── README.md                       # This file
+
 
 📌 Running Experiments
 
