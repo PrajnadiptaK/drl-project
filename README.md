@@ -1,117 +1,77 @@
-🚦 CoLight-Inspired Cooperative Deep RL for Traffic Signal Control
-College Station Road Network Simulation (4-Intersection Prototype)
+⚙️ Setup & Installation
 
-📌 Overview
+🔹 Prerequisites
 
-This repository contains a CoLight-inspired multi-intersection traffic signal control project developed as part of a graduate Deep Reinforcement Learning coursework final project.
+Python 3.8–3.11 recommended
 
-The goal is to examine whether cooperative RL can outperform fixed-time and independent RL controllers when managing traffic flow in a simplified model of College Station, Texas.
+Git
 
-The implementation:
+🔹 Clone the Repository
+git clone https://github.com/ankitaga00/drl-project
+cd drl-project
 
-✔ Extracts a real subnetwork topology via OpenStreetMap
-✔ Builds a custom stochastic traffic environment
-✔ Implements three controllers:
-    ▫ Fixed-time baseline
-    ▫ Independent RL (per-intersection learning)
-    ▫ CoLight-inspired cooperative RL
-✔ Visualizes signal switching & vehicle movements
-✔ Produces comparable performance metrics
-
-This repository satisfies the course requirements: sequential decision making, experiment design, evaluation baselines, visualization, and written report.
-
-📂 Project Structure
-
-📦 traffic-colight-cs/
-
-│
-├── multi_intersection_env.py       # Core traffic environment
-
-├── single_intersection_env.py      # Local intersection dynamics
-
-│
-├── colight_agent.py                # Cooperative RL agent (CoLight-inspired)
+🔹 Create & Activate a Virtual Environment
+python -m venv venv
 
 
-├── train_colight.py                # Training script
+Windows
+
+venv\Scripts\activate
 
 
-├── eval_colight.py                 # Evaluation script
+Mac/Linux
 
-│
-├── train_independent_rl.py         # Independent RL baseline
+source venv/bin/activate
 
-├── eval_independent_rl.py          # Independent baseline evaluation
-
-│
-├── run_fixed_baseline.py           # Fixed-time controller baseline
-
-│
-├── visual_sim.py                   # Pygame traffic visualization
-
-│
-├── logger.py                       # Experiment logging utility
-
-│
-├── results/                        # Output logs / reward curves
-
-│
-└── README.md                       # This file
-
-🚀 Installation & Setup:
-
-Install required libraries:
+🔹 Install Dependencies
 
 pip install -r requirements.txt
 
-📌 Running Experiments
 
-✔ Train Cooperative CoLight-Inspired Model
+🚦 Running the Project
 
-python train_colight.py
+🔹 1. Run the Fixed-Time Baseline
 
-This:
+python src/run_fixed_baseline.py
 
-Runs 100 episodes
+🔹 2. Train the Independent RL Agents
 
-Saves model as trained_colight.pth
+python src/train_independent_rl.py
 
-Logs results under /results/
+This trains four independent DQNs (one per intersection) and saves:
 
-✔ Evaluate Cooperative Model
+models/agent_0.pth … agent_3.pth
 
-python eval_colight.py
+📌 Evaluate Independent RL
 
-Outputs average reward over test runs.
+python src/eval_independent_rl.py
 
-✔ Run Independent RL Baseline
+🔹 3. Train the CoLight-Style Cooperative Agent
 
-Training:
+python src/train_colight.py
 
-python train_independent_rl.py
+This trains a CoLight-inspired model using adjacency awareness and stores:
 
+models/trained_colight.pth
 
-Evaluation:
+📌 Evaluate CoLight
 
-python eval_independent_rl.py
+python src/eval_colight.py
 
+🔹 4. Visualize Traffic Flow Simulation
 
-✔ Produces baseline performance for comparison.
+python src/visual_queues.py
 
-✔ Run Fixed-Time Baseline
-python run_fixed_baseline.py
+You will see:
 
-🎥 Visualization
+✔ signal switching (green/red)
+✔ queues evolving
+✔ vehicles queuing/moving
 
-To view intersection dynamics:
+This is not SUMO-grade visualization — it is intentionally lightweight but interactive.
 
-python visual_sim.py
+📊 Plot Comparisons
 
+To compare all approaches:
 
-This launches a Pygame window displaying:
-
-🟥/🟩 signal switching
-🚗 vehicle queues forming and moving
-🔁 sequential evolution over time
-
-NOTE: The visualization is simplified and intended to illustrate qualitative behavior (queue growth/shrink, signal influence), not a physics-accurate traffic simulator.
+python src/plot_comparison_curves.py
