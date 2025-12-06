@@ -12,11 +12,9 @@ git clone https://github.com/ankitaga00/drl-project.git
 🔹 Create & Activate a Virtual Environment
 python -m venv venv
 
-
 Windows
 
 venv\Scripts\activate
-
 
 Mac/Linux
 
