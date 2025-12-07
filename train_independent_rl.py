@@ -98,62 +98,63 @@ class LocalAgent:
 # ===========================================
 # Training Script
 # ===========================================
+if __name__ == "__main__":
 
-env = TrafficNetworkEnv()
+    env = TrafficNetworkEnv()
 
-num_nodes = env.num_nodes
-state_dim = 5
-action_dim = 2
+    num_nodes = env.num_nodes
+    state_dim = 5
+    action_dim = 2
 
-agents = {i: LocalAgent(state_dim, action_dim) for i in range(num_nodes)}
+    agents = {i: LocalAgent(state_dim, action_dim) for i in range(num_nodes)}
 
-episodes = 100
-results = []
+    episodes = 100
+    results = []
 
-for ep in range(episodes):
-    state_dict = env.reset()
-    total_reward = 0
-    done = False
+    for ep in range(episodes):
+        state_dict = env.reset()
+        total_reward = 0
+        done = False
 
-    while not done:
-        actions = {}
+        while not done:
+            actions = {}
+            for i in range(num_nodes):
+                actions[i] = agents[i].act(state_dict[i])
+
+            next_states, rewards, done = env.step(actions)
+
+            for i in range(num_nodes):
+                agents[i].store(
+                    state_dict[i],
+                    actions[i],
+                    rewards[i],        # local reward
+                    next_states[i],
+                    done
+                )
+                agents[i].train_step()
+
+            state_dict = next_states
+            total_reward += sum(rewards.values())
+
         for i in range(num_nodes):
-            actions[i] = agents[i].act(state_dict[i])
+            agents[i].decay_epsilon()
+            if ep % 10 == 0:
+                agents[i].update_target()
 
-        next_states, rewards, done = env.step(actions)
+        results.append(total_reward)
+        msg = f"Episode {ep + 1}/{episodes}, Total reward: {total_reward:.2f}"
+        print(msg)
+        logger.write(msg)
 
-        for i in range(num_nodes):
-            agents[i].store(
-                state_dict[i],
-                actions[i],
-                rewards[i],        # local reward
-                next_states[i],
-                done
-            )
-            agents[i].train_step()
-
-        state_dict = next_states
-        total_reward += sum(rewards.values())
-
+    # ============= SAVE MODEL ONCE AFTER TRAINING =============
     for i in range(num_nodes):
-        agents[i].decay_epsilon()
-        if ep % 10 == 0:
-            agents[i].update_target()
+        torch.save(agents[i].q_net.state_dict(), f"agent_{i}.pth")
 
-    results.append(total_reward)
-    msg = f"Episode {ep + 1}/{episodes}, Total reward: {total_reward:.2f}"
-    print(msg)
-    logger.write(msg)
+    logger.write("Independent RL models saved successfully")
 
-# ============= SAVE MODEL ONCE AFTER TRAINING =============
-for i in range(num_nodes):
-    torch.save(agents[i].q_net.state_dict(), f"agent_{i}.pth")
+    summary = f"=== Independent RL Training Complete ===\nAverage Episodic Reward: {sum(results)/len(results):.2f}"
+    print(summary)
+    logger.write(summary)
 
-logger.write("✔ Independent RL models saved successfully")
-
-summary = f"=== Independent RL Training Complete ===\nAverage Episodic Reward: {sum(results)/len(results):.2f}"
-print(summary)
-logger.write(summary)
-
-logger.close()
-print("✔ log saved using logger.py")
+    logger.close()
+    print("log saved using logger.py")

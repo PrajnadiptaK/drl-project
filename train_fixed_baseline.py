@@ -32,4 +32,4 @@ print(summary)
 logger.write(summary)
 
 logger.close()
-print("✔ log saved for fixed baseline")
+print("log saved for fixed baseline")

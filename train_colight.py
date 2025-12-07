@@ -69,6 +69,6 @@ for ep in range(episodes):
 
 # ========= SAVE TRAINED MODEL =========
 torch.save(agent.q_net.state_dict(), "trained_colight.pth")
-logger.write("✔ Model saved")
+logger.write("Model saved")
 logger.close()
-print("✔ Log saved using logger.py")
+print("Log saved using logger.py")
